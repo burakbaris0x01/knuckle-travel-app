@@ -4,13 +4,23 @@ const privateKey = fs.readFileSync('data/private.key')
 const publicKey = fs.readFileSync('data/public.key')
 const {accessTokenOptions, refreshTokenOptions} = require('../options/jwt')
 const User = require('../model/user')
+const { accessCookieOptions, authCookieOptions, clearCookieOptions } = require('../utils/cookieOptions')
 
 const handleRefreshToken = async (req, resp, next)=>{
 
   // IF JWT EXISTS BUT NOT VALID LOOK FOR THE REFRESH TOKEN
   if (req.JWTexists && !req.JWTverified){
+    if (!req.cookies.refreshToken) {
+      resp.clearCookie('Authorization', clearCookieOptions);
+      return next()
+    }
 
     const refreshToken = req.cookies.refreshToken.split(' ')[1]
+    if (!refreshToken) {
+      resp.clearCookie('refreshToken', clearCookieOptions);
+      resp.clearCookie('Authorization', clearCookieOptions);
+      return next()
+    }
 
     // TRY TO VERIFY THE REFRESH JWT TOKEN
     let refreshTokenCheck;
@@ -18,8 +28,8 @@ const handleRefreshToken = async (req, resp, next)=>{
       refreshTokenCheck = jwt.verify(refreshToken,publicKey)
     }catch(err){
       // IF THE REFRESH TOKEN IS UNVALID, CLEAR CLIENT SIDE COOKIES
-      resp.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});
-      resp.clearCookie('Authorization', { httpOnly: true, sameSite: 'None', secure: true , path:"/"}); 
+      resp.clearCookie('refreshToken', clearCookieOptions);
+      resp.clearCookie('Authorization', clearCookieOptions); 
       return next()
     }
 
@@ -29,13 +39,13 @@ const handleRefreshToken = async (req, resp, next)=>{
     if (!match){ 
       // IF THE REFRESH JWT IS VERIFIED BUT NOT FOUND IN THE DATABASE, 
       // IT MEANS IT IS USED BEFORE. THEREFORE CLEAR CLIENT SIDE COOKIES.
-      resp.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});
-      resp.clearCookie('Authorization', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});
+      resp.clearCookie('refreshToken', clearCookieOptions);
+      resp.clearCookie('Authorization', clearCookieOptions);
 
       // Delete all refresh tokens.
       await User.updateOne(
         { 'username': refreshTokenCheck.username },
-        { $unset: { "refreshTokens": 1} }
+        { refreshTokens: [] }
       );
       req.reuse=true
       return next()}  
@@ -67,14 +77,10 @@ const handleRefreshToken = async (req, resp, next)=>{
     // NO REFRESH TOKEN IS ALLOWED FOR A NEW ACCESS TOKEN GENERATION TWICE.
     
     //SET NEW ACCESS TOKEN TO THE CLIENT....
-    resp.cookie('Authorization', 'Bearer '+accessToken,
-    { httpOnly: false, maxAge: 24 * 60 * 60 * 1000,
-      sameSite:'None',secure:true, path:'/' })
+    resp.cookie('Authorization', 'Bearer '+accessToken, accessCookieOptions)
 
     //SET NEW REFRESH TOKEN TO THE CLIENT.
-    resp.cookie('refreshToken', 'Bearer '+newRefreshToken,
-    { httpOnly: true, maxAge: 24 * 60 * 60 * 1000,
-      sameSite:'None',secure:true, path:'/' })    
+    resp.cookie('refreshToken', 'Bearer '+newRefreshToken, authCookieOptions)    
 
     //REDIRECT USER BACK TO THE ORIGINAL REQUEST. SINCE TOKENS ARE FRESH, THIS TIME ACCESS TOKEN 
     //WILL BE VERIFIED.

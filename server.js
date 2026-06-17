@@ -5,21 +5,13 @@ const path = require('path')
 const http = require('http')
 const cookieParser = require('cookie-parser')
 const port = process.env.PORT || 5050;
-const mongoose= require('mongoose');
 const socketio = require('socket.io')
 const formatMessage = require('./utils/messageFormat')
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users')
 
 const botName = "KnuckleTravel Bot"
 
-
 // app.use(cors(require('./config/cors'))) //cross origin resource sharing
-// CONNECT TO THE DATABASE.
-const uri = "mongodb+srv://travel:travel@travel.ym0sozy.mongodb.net/?retryWrites=true&w=majority";
-mongoose.connect(uri).then(
-    () => { console.log("Connection is Successfull to the MongoDB! ")},
-    err => { process.exit() }
-  );
 
 // CREATE EXPRESS APP.
 const server = http.createServer(app)
@@ -54,7 +46,9 @@ io.on('connection', socket => {
     // BROADCAST THE NEW CHAT MESSAGE TO ALL THE USERS WITHIN THAT ROOM.
     socket.on('chatMessage',(msg)=>{
       const user = getCurrentUser(socket.id)
-      io.to(user.room).emit('message', formatMessage(user.username, msg))
+      if (user) {
+        io.to(user.room).emit('message', formatMessage(user.username, msg))
+      }
     })
 
     // DISCONNECT.
@@ -95,6 +89,13 @@ app.use('/weatherForecast', require('./routes/api/weatherForecast'))
 app.use('/chat', require('./routes/api/chat'))
 app.use('/lobby', require('./routes/api/lobby'))
 app.use('/contacts', require('./routes/api/contacts'))
+
+app.use((err, req, resp, next) => {
+    console.error(err)
+    resp.status(500).render(path.join(__dirname,'views','error'),{
+        title:"Something went wrong"
+    })
+})
 
 // DEFAULT 404 ROUTE FOR UNKNOWN ENDPOINTS.
 app.all('*',(req,resp)=>{

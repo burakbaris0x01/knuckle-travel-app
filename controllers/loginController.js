@@ -7,6 +7,7 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const jwtOptions = require('../options/jwt.js')
+const { accessCookieOptions, authCookieOptions } = require('../utils/cookieOptions')
 const privateKey = fs.readFileSync('data/private.key')
 
 const getReq = async (req,resp)=>{
@@ -40,12 +41,8 @@ const postReq = async (req,resp)=>{
     const refreshToken = jwt.sign({'username':username},privateKey,refreshTokenOptions)
 
     // SEND THE COOKIES TO THE CLIENT SIDE.
-    resp.cookie('refreshToken', 'Bearer '+refreshToken,
-    { httpOnly: true, maxAge: 24 * 60 * 60 * 1000,
-      sameSite:'None',secure:true, path:'/' })
-    resp.cookie('Authorization', 'Bearer '+accessToken,
-    { httpOnly: false, maxAge: 24 * 60 * 60 * 1000,
-      sameSite:'None',secure:true, path:'/' })   
+    resp.cookie('refreshToken', 'Bearer '+refreshToken, authCookieOptions)
+    resp.cookie('Authorization', 'Bearer '+accessToken, accessCookieOptions)   
   
     // PUSH THE FRESH REFRESH TO THE DATABASE FOR LATER 
     // TOKEN ROTATION AND REUSE DETECTION.

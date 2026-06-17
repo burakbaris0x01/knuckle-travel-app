@@ -1,7 +1,5 @@
 
 
-const mongoose= require('mongoose');
-const uri = "mongodb+srv://burak:F8PRY3LxQeL87CL1@cluster0.bw3ng9v.mongodb.net/?retryWrites=true&w=majority";
 const Travel = require('../model/travels')
 
 const travelCleaner = async ()=>{
@@ -19,11 +17,9 @@ const travelCleaner = async ()=>{
 }
 
 const clean = async()=>{
-    const interval =  setInterval(() => {
+    setInterval(() => {
         travelCleaner();
       }, 1000)
-  
-    mongoose.connect(uri).then(()=>{interval},err=>{console.log("error")})
 }
 
 clean()

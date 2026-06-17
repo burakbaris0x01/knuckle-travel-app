@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "352c26fa-e5cb-479f-ab5f-65b62283df09",
+    "interestedUsers": [
+      "burak2"
+    ],
+    "locationId": "e774661e11bd5529ff1ba4f02c77160c230992bc",
+    "locationInfo": {
+      "Country": "Turkey",
+      "Region": "Ankara",
+      "City": "Ankara",
+      "lat": 39.9334,
+      "long": 32.8597
+    },
+    "date": "1990-12-12"
+  }
+]

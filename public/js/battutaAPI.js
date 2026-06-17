@@ -1,81 +1,74 @@
+$(document).ready(async function() {
+  const countrySelect = $('#country')
+  const regionSelect = $('#region')
+  const citySelect = $('#city')
+  const locationLabel = $('#location')
+  let locations = []
 
-// BATUTA API SERVICE.
-// PROVIDES DATA ABOUT LOCATIONS IN THE WORLD.
+  const resetSelect = (select, label) => {
+    select.empty().append(`<option value="">-- ${label} --</option>`)
+  }
 
-$(document).ready(function() {
-//-------------------------------SELECT CASCADING-------------------------//
-var selectedCountry = (selectedRegion = selectedCity = "");
-// This is a demo API key that can only be used for a short period of time, and will be unavailable soon. You should rather request your API key (free)  from http://battuta.medunes.net/
-var BATTUTA_KEY = "0ba8d2e35d2ac46c7bda2d69ba91a441";
-// Populate country select box from battuta API
-url =
-"https://battuta.medunes.net/api/country/all/?key=" +
-BATTUTA_KEY +
-"&callback=?";
-// EXTRACT JSON DATA.
-$.getJSON(url, function(data) {
-$.each(data, function(index, value) {
-// APPEND OR INSERT DATA TO SELECT ELEMENT.
-$("#country").append(
-'<option value="' + value.code + '">' + value.name + "</option>"
-);
-});
-});
-// Country selected --> update region list .
-$("#country").change(function() {
-selectedCountry = this.options[this.selectedIndex].text;
-countryCode = $("#country").val();
-// Populate country select box from battuta API
-url =
-"https://battuta.medunes.net/api/region/" +
-countryCode + 
-"/all/?key=" +
-BATTUTA_KEY +
-"&callback=?";
-$.getJSON(url, function(data) {
-$("#region option").remove();
-$.each(data, function(index, value) {
-// APPEND OR INSERT DATA TO SELECT ELEMENT.
-$("#region").append(
-'<option value="' + value.region + '">' + value.region + "</option>"
-);
-});
-});
-});
-// Region selected --> updated city list
-$("#region").on("change", function() {
-selectedRegion = this.options[this.selectedIndex].text;
-// Populate country select box from battuta API
-countryCode = $("#country").val();
-region = $("#region").val();
-url =
-"https://battuta.medunes.net/api/city/" +
-countryCode +
-"/search/?region=" +
-region +
-"&key=" +
-BATTUTA_KEY +
-"&callback=?";
-$.getJSON(url, function(data) {
-console.log(data);
-$("#city option").remove();
-$.each(data, function(index, value) {
-// APPEND OR INSERT DATA TO SELECT ELEMENT.
-$("#city").append(
-'<option value="' + value.city + '">' + value.city + "</option>"
-);
-});
-});
-});
-$("#city").on("change", function() {
-selectedCity = this.options[this.selectedIndex].text;
-$("#location").html(
-"Locatation: Country: " +
-selectedCountry +
-", Region: " +
-selectedRegion +
-", City: " +
-selectedCity
-);
-});
-});
+  const selectedCountry = () => locations.find((country) => country.code === countrySelect.val())
+  const selectedRegion = () => selectedCountry()?.regions.find((region) => region.name === regionSelect.val())
+  const selectedCity = () => selectedRegion()?.cities.find((city) => city.name === citySelect.val())
+
+  const populateCountries = () => {
+    resetSelect(countrySelect, 'Country')
+    locations.forEach((country) => {
+      countrySelect.append(`<option value="${country.code}">${country.name}</option>`)
+    })
+  }
+
+  const populateRegions = () => {
+    resetSelect(regionSelect, 'Region')
+    resetSelect(citySelect, 'City')
+    locationLabel.empty()
+
+    const country = selectedCountry()
+    if (!country) return
+
+    country.regions.forEach((region) => {
+      regionSelect.append(`<option value="${region.name}">${region.name}</option>`)
+    })
+  }
+
+  const populateCities = () => {
+    resetSelect(citySelect, 'City')
+    locationLabel.empty()
+
+    const region = selectedRegion()
+    if (!region) return
+
+    region.cities.forEach((city) => {
+      citySelect.append(`<option value="${city.name}" data-lat="${city.lat}" data-long="${city.long}">${city.name}</option>`)
+    })
+  }
+
+  const updateLocationLabel = () => {
+    const country = selectedCountry()
+    const region = selectedRegion()
+    const city = selectedCity()
+
+    if (!country || !region || !city) {
+      locationLabel.empty()
+      return
+    }
+
+    locationLabel.text(`Location: Country: ${country.name}, Region: ${region.name}, City: ${city.name}`)
+  }
+
+  try {
+    locations = await fetch('/data/locations.json').then((res) => {
+      if (!res.ok) throw new Error('Could not load local locations.')
+      return res.json()
+    })
+    populateCountries()
+  } catch (error) {
+    alerts('danger', 'Location list could not be loaded.')
+  }
+
+  countrySelect.on('change', populateRegions)
+  regionSelect.on('change', populateCities)
+  citySelect.on('change', updateLocationLabel)
+})

@@ -1,5 +1,6 @@
 const User = require('../model/user')
 const path = require('path')
+const { clearCookieOptions } = require('../utils/cookieOptions')
 const isUserInDb = async(req, resp, next)=>{
 
   req.isUserInDb = true;
@@ -14,8 +15,8 @@ const isUserInDb = async(req, resp, next)=>{
     //CREATION. THEREFORE CLEAR ALL THE JWT COOKIES.
     if (await User.findOne({username:userName})==null){
       req.isUserInDb = false;
-      resp.clearCookie('Authorization', { httpOnly: true, sameSite: 'None', secure: true, path:"/"});
-      resp.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});
+      resp.clearCookie('Authorization', clearCookieOptions);
+      resp.clearCookie('refreshToken', clearCookieOptions);
       return resp.render(path.join(__dirname,'..','views','error'),{
       title:"User seems to be deleted, refresh the page."
       })

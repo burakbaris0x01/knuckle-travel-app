@@ -1,0 +1,204 @@
+[
+  {
+    "code": "TR",
+    "name": "Turkey",
+    "regions": [
+      {
+        "name": "Istanbul",
+        "cities": [
+          { "name": "Istanbul", "lat": 41.0082, "long": 28.9784 },
+          { "name": "Kadikoy", "lat": 40.9919, "long": 29.0278 },
+          { "name": "Besiktas", "lat": 41.0438, "long": 29.0094 }
+        ]
+      },
+      {
+        "name": "Ankara",
+        "cities": [
+          { "name": "Ankara", "lat": 39.9334, "long": 32.8597 },
+          { "name": "Cankaya", "lat": 39.9179, "long": 32.8627 }
+        ]
+      },
+      {
+        "name": "Izmir",
+        "cities": [
+          { "name": "Izmir", "lat": 38.4237, "long": 27.1428 },
+          { "name": "Cesme", "lat": 38.3228, "long": 26.3057 }
+        ]
+      },
+      {
+        "name": "Antalya",
+        "cities": [
+          { "name": "Antalya", "lat": 36.8969, "long": 30.7133 },
+          { "name": "Alanya", "lat": 36.5444, "long": 31.9954 },
+          { "name": "Kas", "lat": 36.2018, "long": 29.6377 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "US",
+    "name": "United States",
+    "regions": [
+      {
+        "name": "California",
+        "cities": [
+          { "name": "Los Angeles", "lat": 34.0522, "long": -118.2437 },
+          { "name": "San Francisco", "lat": 37.7749, "long": -122.4194 },
+          { "name": "San Diego", "lat": 32.7157, "long": -117.1611 }
+        ]
+      },
+      {
+        "name": "New York",
+        "cities": [
+          { "name": "New York City", "lat": 40.7128, "long": -74.006 },
+          { "name": "Buffalo", "lat": 42.8864, "long": -78.8784 }
+        ]
+      },
+      {
+        "name": "Florida",
+        "cities": [
+          { "name": "Miami", "lat": 25.7617, "long": -80.1918 },
+          { "name": "Orlando", "lat": 28.5383, "long": -81.3792 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "regions": [
+      {
+        "name": "England",
+        "cities": [
+          { "name": "London", "lat": 51.5072, "long": -0.1276 },
+          { "name": "Manchester", "lat": 53.4808, "long": -2.2426 },
+          { "name": "Liverpool", "lat": 53.4084, "long": -2.9916 }
+        ]
+      },
+      {
+        "name": "Scotland",
+        "cities": [
+          { "name": "Edinburgh", "lat": 55.9533, "long": -3.1883 },
+          { "name": "Glasgow", "lat": 55.8642, "long": -4.2518 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "regions": [
+      {
+        "name": "Berlin",
+        "cities": [
+          { "name": "Berlin", "lat": 52.52, "long": 13.405 }
+        ]
+      },
+      {
+        "name": "Bavaria",
+        "cities": [
+          { "name": "Munich", "lat": 48.1351, "long": 11.582 },
+          { "name": "Nuremberg", "lat": 49.4521, "long": 11.0767 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "regions": [
+      {
+        "name": "Ile-de-France",
+        "cities": [
+          { "name": "Paris", "lat": 48.8566, "long": 2.3522 },
+          { "name": "Versailles", "lat": 48.8049, "long": 2.1204 }
+        ]
+      },
+      {
+        "name": "Provence-Alpes-Cote d'Azur",
+        "cities": [
+          { "name": "Nice", "lat": 43.7102, "long": 7.262 },
+          { "name": "Marseille", "lat": 43.2965, "long": 5.3698 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "regions": [
+      {
+        "name": "Lazio",
+        "cities": [
+          { "name": "Rome", "lat": 41.9028, "long": 12.4964 }
+        ]
+      },
+      {
+        "name": "Lombardy",
+        "cities": [
+          { "name": "Milan", "lat": 45.4642, "long": 9.19 }
+        ]
+      },
+      {
+        "name": "Veneto",
+        "cities": [
+          { "name": "Venice", "lat": 45.4408, "long": 12.3155 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "regions": [
+      {
+        "name": "Community of Madrid",
+        "cities": [
+          { "name": "Madrid", "lat": 40.4168, "long": -3.7038 }
+        ]
+      },
+      {
+        "name": "Catalonia",
+        "cities": [
+          { "name": "Barcelona", "lat": 41.3874, "long": 2.1686 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "regions": [
+      {
+        "name": "North Holland",
+        "cities": [
+          { "name": "Amsterdam", "lat": 52.3676, "long": 4.9041 }
+        ]
+      },
+      {
+        "name": "South Holland",
+        "cities": [
+          { "name": "Rotterdam", "lat": 51.9244, "long": 4.4777 }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "regions": [
+      {
+        "name": "Tokyo",
+        "cities": [
+          { "name": "Tokyo", "lat": 35.6762, "long": 139.6503 }
+        ]
+      },
+      {
+        "name": "Kyoto",
+        "cities": [
+          { "name": "Kyoto", "lat": 35.0116, "long": 135.7681 }
+        ]
+      }
+    ]
+  }
+]

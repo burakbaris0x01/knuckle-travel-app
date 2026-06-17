@@ -1,17 +1,8 @@
+const createCollection = require('../utils/jsonCollection')
 
-// MONGODB MODEL FOR THE USERS SCHEMA.
-
-const mongoose = require('mongoose')
-
-const UserSchema = new mongoose.Schema(
-  {
-    username: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    refreshTokens: [String]
+module.exports = createCollection('users.json', {
+  uniqueKey: 'username',
+  defaults: {
+    refreshTokens: [],
   },
-  {collection: 'users'}
-)
-
-const model = mongoose.model('UserSchema', UserSchema)
-
-module.exports = model
+})

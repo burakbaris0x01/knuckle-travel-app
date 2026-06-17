@@ -6,6 +6,7 @@ const button = document.getElementById('submitButton')
 
 async function submitSuggestion(submit){
     // event.preventDefault()
+    const cityOption = $('#city option:selected')
     const city = $('#city')[0].value
     const region = $('#region')[0].value
     const country = $("#country option:selected").text();
@@ -20,7 +21,13 @@ async function submitSuggestion(submit){
       return
     }
     const dateControl = document.querySelector('input[type="date"]');
-    const suggestion = {'Country':country, 'Region':region, 'City':city}
+    const suggestion = {
+      'Country':country,
+      'Region':region,
+      'City':city,
+      'lat': Number(cityOption.data('lat')),
+      'long': Number(cityOption.data('long'))
+    }
 
     const result = await fetch('/suggest-trip',{
       method:'POST',
@@ -30,8 +37,10 @@ async function submitSuggestion(submit){
     body: JSON.stringify({"date":dateControl.value,"suggestion":suggestion,"submit":submit})
     }).then(res=>res.json())
     if (result.status == "ok"){alerts('success',result.message)}
-    if (result.status == "err"){alerts('danger',result.message)}
-    seeLocation(result.data.lat, result.data.long)
+    if (result.status == "error"){alerts('danger',result.message)}
+    if (result.data && result.data.lat && result.data.long) {
+      seeLocation(result.data.lat, result.data.long)
+    }
   
 }
 

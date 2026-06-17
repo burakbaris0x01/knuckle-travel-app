@@ -4,12 +4,18 @@
 // SANITIZING THE INPUT. MAKING IT LOOK PRETTIER AND SENDING IT BACK TO THE 
 // CLIENT. ORIGINAL RESPONSE IS NOT USER FRIENDLY.
 const weatherForecast = async (req,resp,next)=>{
+    if (!String(req.originalUrl).includes("/weatherForecast") && req.body.weather !== "yes") {
+      return next()
+    }
     
     address = `${req.query.Country} ${req.query.Region} ${req.query.City}`
     const request = `https://api.openweathermap.org/data/3.0/onecall?lat=${req.lat}&lon=${req.long}&appid=ee9b2a7706cbd56d1cddc044386e9fe5`
     const result = await fetch(request,{
       method:"GET",
     }).then(res=>res.json())
+    if (!result.daily) {
+      return resp.status(502).send({"status":"error","message":"Weather service is unavailable.","data":""})
+    }
     weatherArray = new Array() 
     weatherArray.push({"Location":address,"Timezone":result.timezone})
     for (let i = 0;i<7;i++){

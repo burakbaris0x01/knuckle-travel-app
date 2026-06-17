@@ -3,14 +3,15 @@
 
 const User = require('../model/user')
 const path = require('path');
+const { clearCookieOptions } = require('../utils/cookieOptions')
 
 const getReq = async (req, resp) => {
     try{
       const refreshToken = req.cookies.refreshToken.split(' ')[1]
       const accessToken = req.cookies.Authorization.split(' ')[1]
       // CLEAR CLIENT SIDE COOKIES.
-      resp.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});
-      resp.clearCookie('Authorization', { httpOnly: true, sameSite: 'None', secure: true , path:"/"});  
+      resp.clearCookie('refreshToken', clearCookieOptions);
+      resp.clearCookie('Authorization', clearCookieOptions);  
       const match = await User.findOne({ refreshTokens: { "$in" : [refreshToken]} }).lean()
       
       // REMOVE THE REFRESH TOKEN FROM THE DATABASE AFTER LOGOUT 

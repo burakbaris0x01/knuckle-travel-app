@@ -13,16 +13,14 @@ const verifyAccessJWT = (req, resp, next)=>{
     req.JWTexists=true;
     const token = cookies.Authorization.split(' ')[1]
     // IF JWT ACCESS TOKEN EXISTS, CHECK IF IT IS EXPIRED OR VALID
-    jwt.verify(token, publicKey, async(err,decoded)=>{
-      // IF IT IS VALID, SET BOOLEAN VARIABLE TRUE
-      if (!err ){
-          req.JWTverified = true                  
-          req.decoded = decoded
-          req.username = decoded.username
-        }
-      }
-      // IF JWT IS UNVALID, SET BOOLEAN FALSE
-    )
+    try {
+      const decoded = jwt.verify(token, publicKey)
+      req.JWTverified = true
+      req.decoded = decoded
+      req.username = decoded.username
+    } catch (err) {
+      req.JWTverified = false
+    }
   }
   return next()
 }
