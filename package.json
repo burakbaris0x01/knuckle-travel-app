@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.15.1",
+    "@googlemaps/js-api-loader": "^1.16.2",
     "bcrpyt": "^2.0.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
